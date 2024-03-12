@@ -1,6 +1,5 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.shortcuts import render
 
 @api_view(['GET'])
 def get_students(request):
@@ -8,4 +7,4 @@ def get_students(request):
 
 @api_view(['GET'])
 def test_home(request):
-    return render(request,'test.html')
+    return Response('Home page has been loaded successfully')
