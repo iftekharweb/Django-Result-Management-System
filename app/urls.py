@@ -1,7 +1,8 @@
-from django.urls import path
+from rest_framework_nested import routers
 from . import views
 
-urlpatterns = [
-    path('', views.test_home),
-    path('students/', views.get_students),
-]
+
+router = routers.DefaultRouter()
+router.register('students', views.StudentViewSet, basename='students')
+
+urlpatterns = router.urls

@@ -1,35 +1,43 @@
 from django.db import models
 
-class University(models.Model):
-    name = models.CharField(max_length=100)
-
 class Student(models.Model):
-    name = models.CharField(max_length=100)
-    student_id = models.CharField(max_length=20, unique=True)
-    university = models.ForeignKey(University, on_delete=models.CASCADE)
-    blood_group = models.CharField(max_length=10)
-    email = models.EmailField()
+    BLOOD_GROUP_CHOICE = [
+        ('A+', 'A+'),
+        ('B+', 'B+'),
+        ('AB+', 'AB+'),
+        ('O+', 'O+'),
+        ('A-', 'A-'),
+        ('B-', 'B-'),
+        ('AB-', 'AB-'),
+        ('O-', 'O-'),
+    ]
+    name = models.CharField(max_length=255)
+    id_no = models.CharField(max_length=20, unique=True)
+    hsc_reg = models.CharField(max_length=20, unique=True)
+    university = models.CharField(max_length=255, default='University of Rajshahi')
+    blood_group = models.CharField(max_length=10, choices=BLOOD_GROUP_CHOICE)
+    email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=15)
-    session = models.CharField(max_length=20)
+    session = models.CharField(max_length=20, default='2018-2019')
     birth_day = models.DateField()
-    residential_hall_name = models.CharField(max_length=100)
+    residential_hall_name = models.CharField(max_length=255)
     # Assuming result is a CharField storing JSON or similar structured data
-    result = models.JSONField()
+    # result = models.JSONField()
 
 class Teacher(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=255)
     email = models.EmailField()
 
 class Course(models.Model):
     course_code = models.CharField(max_length=20, unique=True)
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=255)
     sectionA_assigned_teacher = models.ForeignKey(Teacher, related_name='sectionA_courses', on_delete=models.SET_NULL, null=True)
     sectionB_assigned_teacher = models.ForeignKey(Teacher, related_name='sectionB_courses', on_delete=models.SET_NULL, null=True)
     credits = models.IntegerField()
 
 class Section(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    marks = models.FloatField()
+    marks = models.DecimalField(max_digits=5, decimal_places=2)
     SECTION_CHOICES = [
         ('A', 'Section A'),
         ('B', 'Section B'),
@@ -41,9 +49,9 @@ class Marks(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     section = models.CharField(max_length=1, choices=Section.SECTION_CHOICES)
-    ct_marks = models.FloatField()
-    semester_final_marks = models.FloatField()
-    presentation_marks = models.FloatField()
+    ct_marks = models.DecimalField(max_digits=5, decimal_places=2)
+    semester_final_marks = models.DecimalField(max_digits=5, decimal_places=2)
+    presentation_marks = models.DecimalField(max_digits=5, decimal_places=2)
 
 class Semester(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
@@ -54,9 +62,9 @@ class Semester(models.Model):
 class YearlyCGPA(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     year = models.IntegerField()
-    ycgpa = models.FloatField()
+    ycgpa = models.DecimalField(max_digits=5, decimal_places=2)
 
 class SemesterCGPA(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
-    scgpa = models.FloatField()
+    scgpa = models.DecimalField(max_digits=5, decimal_places=2)

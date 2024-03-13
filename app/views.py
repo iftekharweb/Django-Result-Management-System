@@ -1,10 +1,13 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework import viewsets
+from . import models, serializers
 
-@api_view(['GET'])
-def get_students(request):
-    return Response('OK')
+class StudentViewSet(viewsets.ModelViewSet):
+    def get_queryset(self):
+        return models.Student.objects.all()
+    
+    def get_serializer_class(self):
+        return serializers.StudentSerializer
 
-@api_view(['GET'])
-def test_home(request):
-    return Response('Home page has been loaded successfully')
+
