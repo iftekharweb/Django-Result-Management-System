@@ -28,12 +28,20 @@ class Teacher(models.Model):
     name = models.CharField(max_length=255)
     email = models.EmailField()
 
+    def __str__(self) -> str:
+        return self.name
+
 class Course(models.Model):
     course_code = models.CharField(max_length=20, unique=True)
     title = models.CharField(max_length=255)
     sectionA_assigned_teacher = models.ForeignKey(Teacher, related_name='sectionA_courses', on_delete=models.SET_NULL, null=True)
     sectionB_assigned_teacher = models.ForeignKey(Teacher, related_name='sectionB_courses', on_delete=models.SET_NULL, null=True)
     credits = models.IntegerField()
+
+    def __str__(self) -> str:
+        return f'{self.course_code} - {self.title}'
+    
+    
 
 class Section(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)

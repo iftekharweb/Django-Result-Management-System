@@ -9,5 +9,19 @@ class StudentViewSet(viewsets.ModelViewSet):
     
     def get_serializer_class(self):
         return serializers.StudentSerializer
+    
+class TeacherViewSet(viewsets.ModelViewSet):
+    def get_queryset(self):
+        return models.Teacher.objects.all()
+    
+    def get_serializer_class(self):
+        return serializers.TeacherSerializer
+    
+class CourseViewSet(viewsets.ModelViewSet):
+    def get_queryset(self):
+        return models.Course.objects.all()
+    
+    def get_serializer_class(self):
+        return serializers.CourseSerializer
 
 
