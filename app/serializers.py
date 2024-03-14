@@ -30,19 +30,28 @@ class CourseSerializer(serializers.ModelSerializer):
             'credits'
             ]
 
-
+class TeacherCourseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Course
+        fields = ['id', 'title', 'course_code']
 
 class TeacherSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Teacher
-        fields = ['id','name', 'email', 'sectionA_courses', 'sectionB_courses']
+        fields = ['id','name', 'email', 'sectionA_sir', 'sectionB_sir']
+    
+    sectionA_sir = serializers.SerializerMethodField(method_name='get_sectionA_sir')
+    sectionB_sir = serializers.SerializerMethodField(method_name='get_sectionB_sir')
 
-        sectionA_courses = serializers.PrimaryKeyRelatedField(
-            queryset=models.Course.objects.all()
-        )
-        sectionB_courses = serializers.PrimaryKeyRelatedField(
-            queryset=models.Course.objects.all()
-        )
+    def get_sectionA_sir(self, obj):
+        sectionA_courses = models.Course.objects.filter(sectionA_assigned_teacher=obj)
+        sectionA_serializer = TeacherCourseSerializer(sectionA_courses, many=True)
+        return sectionA_serializer.data
+    
+    def get_sectionB_sir(self, obj):
+        sectionB_courses = models.Course.objects.filter(sectionB_assigned_teacher=obj)
+        sectionB_serializer = TeacherCourseSerializer(sectionB_courses, many=True)
+        return sectionB_serializer.data
     
     

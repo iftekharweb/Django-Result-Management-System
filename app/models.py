@@ -41,31 +41,29 @@ class Course(models.Model):
     def __str__(self) -> str:
         return f'{self.course_code} - {self.title}'
     
-    
 
-class Section(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    marks = models.DecimalField(max_digits=5, decimal_places=2)
-    SECTION_CHOICES = [
-        ('A', 'Section A'),
-        ('B', 'Section B'),
-    ]
-    section = models.CharField(max_length=1, choices=SECTION_CHOICES)
-    assigned_teacher = models.ForeignKey(Teacher, on_delete=models.SET_NULL, null=True)
-
-class Marks(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-    section = models.CharField(max_length=1, choices=Section.SECTION_CHOICES)
-    ct_marks = models.DecimalField(max_digits=5, decimal_places=2)
-    semester_final_marks = models.DecimalField(max_digits=5, decimal_places=2)
-    presentation_marks = models.DecimalField(max_digits=5, decimal_places=2)
 
 class Semester(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     semester_number = models.IntegerField()
     courses = models.ManyToManyField(Course)
-    # Add more fields as needed for semester details
+
+
+class Marks(models.Model):
+    SECTION_CHOICES = [
+        ('A', 'Section A'),
+        ('B', 'Section B'),
+    ]
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    section = models.CharField(max_length=1, choices=SECTION_CHOICES)
+
+    attendence_marks = models.DecimalField(max_digits=5, decimal_places=2)
+    ct_marks = models.DecimalField(max_digits=5, decimal_places=2)
+    presentation_marks = models.DecimalField(max_digits=5, decimal_places=2)
+    semester_final_marks = models.DecimalField(max_digits=5, decimal_places=2)
+
 
 class YearlyCGPA(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
