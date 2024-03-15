@@ -28,8 +28,9 @@ class SemesterSerializer(serializers.ModelSerializer):
         students = models.Student.objects.filter(semester=obj)
         students_serializer = CustomStudentSerializer(students, many=True)
         return students_serializer.data
-    def grt_courses(self, obj):
-        courses = models.Student.objects.filter(semester=obj)
+
+    def get_courses(self, obj):
+        courses = models.Course.objects.filter(semester=obj)
         courses_serializer = CustomCourseSerializer(courses, many=True)
         return courses_serializer.data
 
@@ -52,6 +53,7 @@ class StudentSerializer(serializers.ModelSerializer):
             'session',
             'birth_day',
             'residential_hall_name',
+
         ]
 
 class CourseSerializer(serializers.ModelSerializer):
