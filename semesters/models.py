@@ -1,8 +1,10 @@
 # from django.db import models
+# from ..app import models as MM
 
-# # Create your models here.
 # class Semester(models.Model):
-#     semester_number = models.IntegerField()
+#     semester_number = models.IntegerField(unique=True)
+#     semester_name = models.CharField(max_length=255)
+    
 
 #     def __str__(self) -> str:
 #         if self.semester_number == 1:
@@ -21,3 +23,7 @@
 #             return f'4th Year Odd Semester'
 #         elif self.semester_number == 8:
 #             return f'4th Year Even Semester'
+        
+# class Student(models.Model):
+#     semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
+#     student = models.ForeignKey(MM.Student, on_delete=models.PROTECT)

@@ -1,5 +1,54 @@
 from django.db import models
 
+
+class Semester(models.Model): 
+    semester_no = models.IntegerField(unique=True)
+    title = models.CharField(max_length=255)
+    students = models.ManyToManyField(
+        'Student', 
+        null=True, 
+        related_name='+',
+        blank=True
+    )
+    courses = models.ManyToManyField(
+        'Course', 
+        related_name='+', 
+        null=True,
+        blank=True
+        )
+    def __str__(self) -> str:
+        return self.title
+
+class Teacher(models.Model):
+    name = models.CharField(max_length=255)
+    id_no = models.CharField(max_length=255)
+    email = models.EmailField(unique=True)
+    def __str__(self) -> str:
+        return self.name
+
+class Course(models.Model):
+    course_code = models.CharField(
+        max_length=20, 
+        unique=True
+    )
+    title = models.CharField(max_length=255)
+    semester = models.ForeignKey(Semester, on_delete=models.PROTECT)
+    sectionA_assigned_teacher = models.ForeignKey(
+        Teacher, 
+        on_delete=models.SET_NULL, 
+        null=True,  
+        related_name='sectionA_courses'
+    )
+    sectionB_assigned_teacher = models.ForeignKey(
+        Teacher, 
+        related_name='sectionB_courses', 
+        on_delete=models.SET_NULL, 
+        null=True
+    )
+    credits = models.IntegerField()
+    def __str__(self) -> str:
+        return f'{self.course_code} - {self.title}'
+
 class Student(models.Model):
     BLOOD_GROUP_CHOICE = [
         ('A+', 'A+'),
@@ -17,36 +66,15 @@ class Student(models.Model):
     university = models.CharField(max_length=255, default='University of Rajshahi')
     blood_group = models.CharField(max_length=10, choices=BLOOD_GROUP_CHOICE)
     email = models.EmailField(unique=True)
-    phone_number = models.CharField(max_length=15)
+    phone_number = models.CharField(max_length=15, null=True)
     session = models.CharField(max_length=20, default='2018-2019')
     birth_day = models.DateField()
     residential_hall_name = models.CharField(max_length=255)
-    # Assuming result is a CharField storing JSON or similar structured data
-    # result = models.JSONField()
-
-class Teacher(models.Model):
-    name = models.CharField(max_length=255)
-    email = models.EmailField()
-
+    semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
     def __str__(self) -> str:
-        return self.name
-
-class Course(models.Model):
-    course_code = models.CharField(max_length=20, unique=True)
-    title = models.CharField(max_length=255)
-    sectionA_assigned_teacher = models.ForeignKey(Teacher, related_name='sectionA_courses', on_delete=models.SET_NULL, null=True)
-    sectionB_assigned_teacher = models.ForeignKey(Teacher, related_name='sectionB_courses', on_delete=models.SET_NULL, null=True)
-    credits = models.IntegerField()
-
-    def __str__(self) -> str:
-        return f'{self.course_code} - {self.title}'
-    
+        return f'{self.id_no} | {self.name}'
 
 
-class Semester(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    semester_number = models.IntegerField()
-    courses = models.ManyToManyField(Course)
 
 
 class Marks(models.Model):
