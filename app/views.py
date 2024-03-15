@@ -31,5 +31,13 @@ class CourseViewSet(viewsets.ModelViewSet):
     
     def get_serializer_class(self):
         return serializers.CourseSerializer
+    
+
+class MarkViewSet(viewsets.ModelViewSet):
+    def get_queryset(self):
+        return models.Marks.objects.all()
+    
+    def get_serializer_class(self):
+        return serializers.MarkSerializer
 
 

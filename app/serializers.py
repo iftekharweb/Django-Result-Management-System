@@ -93,6 +93,12 @@ class TeacherSerializer(serializers.ModelSerializer):
         return sectionB_serializer.data
     
 
+class MarkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Marks
+        fields = '__all__'
+    
+
 
     
     

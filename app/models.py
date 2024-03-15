@@ -81,6 +81,7 @@ class Marks(models.Model):
     SECTION_CHOICES = [
         ('A', 'Section A'),
         ('B', 'Section B'),
+        ('L', 'LAB')
     ]
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
