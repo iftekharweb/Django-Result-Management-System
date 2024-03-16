@@ -1,5 +1,6 @@
 from . import models
 from rest_framework import serializers
+from decimal import Decimal
 
 class CustomCourseSerializer(serializers.ModelSerializer):
     class Meta:
@@ -97,6 +98,65 @@ class MarkSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Marks
         fields = '__all__'
+
+
+# TRYING
+
+
+class StudentResultSerializer(serializers.ModelSerializer):
+    marks = MarkSerializer(many=True, source='marks_set')
+
+    class Meta:
+        model = models.Student
+        fields = ['id', 'name', 'marks','semester_result']
+    semester_result = serializers.SerializerMethodField(method_name='get_semester_result')
+
+    def get_semester_result(self, obj):
+        marks = obj.marks_set.all()
+        total_marks = 0
+        total_credits = 0
+        
+        for mark in marks:
+            # ..
+            HAVE_MARKS = Decimal(mark.attendence_marks)+Decimal(mark.ct_marks)+Decimal(mark.presentation_marks)+Decimal(mark.semester_final_marks)
+            TOTAL_MARKS = 100/Decimal(mark.course.credits)
+            PERCENT = (HAVE_MARKS/TOTAL_MARKS)*Decimal(100)
+            GRADE = 0
+            if PERCENT<40:
+                GRADE = 0
+            elif PERCENT<45:
+                GRADE = 2.00
+            elif PERCENT<50:
+                GRADE = 2.25
+            elif PERCENT<55:
+                GRADE = 2.50
+            elif PERCENT<60:
+                GRADE = 2.75
+            elif PERCENT<65:
+                GRADE = 3.00
+            elif PERCENT<70:
+                GRADE = 3.25
+            elif PERCENT<75:
+                GRADE = 3.50
+            elif PERCENT<80:
+                GRADE = 3.75
+            else:
+                GRADE = 4.00
+            # ..
+            total_marks += Decimal(GRADE) * Decimal(mark.course.credits)
+            total_credits += Decimal(mark.course.credits)
+        
+        print(total_marks)
+        print(total_credits)
+        
+        # Calculate the semester result
+        if total_credits > 0:
+            semester_result = total_marks / total_credits
+        else:
+            semester_result = 0
+        
+        return semester_result
+
     
 
 

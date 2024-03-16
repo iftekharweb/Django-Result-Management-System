@@ -1,7 +1,7 @@
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
+from rest_framework import generics
 from rest_framework import viewsets
 from . import models, serializers
+from rest_framework import generics
 
 class SemesterViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
@@ -39,5 +39,12 @@ class MarkViewSet(viewsets.ModelViewSet):
     
     def get_serializer_class(self):
         return serializers.MarkSerializer
+    
+
+# TRYING
+
+class StudentResultView(generics.RetrieveAPIView):
+    queryset = models.Student.objects.all()
+    serializer_class = serializers.StudentResultSerializer
 
 

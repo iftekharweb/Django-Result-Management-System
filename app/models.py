@@ -71,8 +71,9 @@ class Student(models.Model):
     birth_day = models.DateField()
     residential_hall_name = models.CharField(max_length=255)
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
+    semester_result = models.DecimalField(max_digits=5, decimal_places=3)
     def __str__(self) -> str:
-        return f'{self.id_no} | {self.name}'
+        return f'{self.id_no}'
 
 
 
@@ -93,13 +94,14 @@ class Marks(models.Model):
     presentation_marks = models.DecimalField(max_digits=5, decimal_places=2)
     semester_final_marks = models.DecimalField(max_digits=5, decimal_places=2)
 
+class SemesterCGPA(models.Model):
+    student = models.OneToOneField(Student, on_delete=models.CASCADE, primary_key=True)
+    semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
+    scgpa = models.DecimalField(max_digits=5, decimal_places=2, blank=True)
+
+
 
 class YearlyCGPA(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     year = models.IntegerField()
     ycgpa = models.DecimalField(max_digits=5, decimal_places=2)
-
-class SemesterCGPA(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
-    scgpa = models.DecimalField(max_digits=5, decimal_places=2)

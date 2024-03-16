@@ -42,3 +42,26 @@ class StudentAdmin(admin.ModelAdmin):
     list_editable = ['semester']
     search_fields = ['id_no', 'semester', 'session']
 
+@admin.register(models.Marks)
+class MarksAdmin(admin.ModelAdmin):
+    list_display = [
+        'student',
+        'semester',
+        'course',
+        'section',
+        'attendence_marks',
+        'ct_marks',
+        'presentation_marks',
+        'semester_final_marks'
+    ]
+    list_editable = [
+        'attendence_marks',
+        'ct_marks',
+        'presentation_marks',
+        'semester_final_marks'
+    ]
+    search_fields = [
+        'student__id_no',
+        'semester__title',
+    ]
+
