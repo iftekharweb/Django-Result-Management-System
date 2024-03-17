@@ -78,7 +78,7 @@ class TeacherSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Teacher
-        fields = ['id','name', 'email', 'section_As', 'section_Bs']
+        fields = ['id','first_name', 'last_name', 'email', 'section_As', 'section_Bs']
     
     section_As = serializers.SerializerMethodField(method_name='get_sectionA_sir')
     section_Bs = serializers.SerializerMethodField(method_name='get_sectionB_sir')
@@ -96,7 +96,7 @@ class TeacherSerializer(serializers.ModelSerializer):
 
 class MarkSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.Marks
+        model = models.Mark
         fields = '__all__'
 
 

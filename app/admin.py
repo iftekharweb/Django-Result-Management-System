@@ -6,10 +6,13 @@ from . import models
 class TeacherAdmin(admin.ModelAdmin):
     list_display = [
         'id_no',
-        'name',
+        'first_name',
+        'last_name',
         'email'
     ]
-    search_fields = ['id_no', 'name']
+    list_select_related = ['user']
+    ordering = ['user__first_name', 'user__last_name']
+    search_fields = ['id_no']
 
 @admin.register(models.Course)
 class CourseAdmin(admin.ModelAdmin):
@@ -42,7 +45,7 @@ class StudentAdmin(admin.ModelAdmin):
     list_editable = ['semester']
     search_fields = ['id_no', 'semester', 'session']
 
-@admin.register(models.Marks)
+@admin.register(models.Mark)
 class MarksAdmin(admin.ModelAdmin):
     list_display = [
         'student',

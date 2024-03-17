@@ -35,7 +35,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
 class MarkViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
-        return models.Marks.objects.all()
+        return models.Mark.objects.all()
     
     def get_serializer_class(self):
         return serializers.MarkSerializer

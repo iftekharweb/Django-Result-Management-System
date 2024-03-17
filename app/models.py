@@ -1,4 +1,6 @@
 from django.db import models
+from django.conf import settings
+from django.contrib import admin
 
 
 class Semester(models.Model): 
@@ -20,11 +22,25 @@ class Semester(models.Model):
         return self.title
 
 class Teacher(models.Model):
-    name = models.CharField(max_length=255)
     id_no = models.CharField(max_length=255)
-    email = models.EmailField(unique=True)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
     def __str__(self) -> str:
-        return self.name
+        return f'{self.user.first_name} {self.user.last_name}'
+    
+    @admin.display(ordering='user__first_name')
+    def first_name(self):
+        return self.user.first_name
+    
+    @admin.display(ordering='user__last_name')
+    def last_name(self):
+        return self.user.last_name
+    
+    def email(self):
+        return self.user.email
+    
+    class Meta:
+        ordering = ['user__first_name', 'user__last_name', 'id_no']
 
 class Course(models.Model):
     course_code = models.CharField(
@@ -72,11 +88,13 @@ class Student(models.Model):
     residential_hall_name = models.CharField(max_length=255)
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
     semester_result = models.DecimalField(max_digits=5, decimal_places=3)
+
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     def __str__(self) -> str:
         return f'{self.id_no}'
 
 
-class Marks(models.Model):
+class Mark(models.Model):
     SECTION_CHOICES = [
         ('A', 'Section A'),
         ('B', 'Section B'),
