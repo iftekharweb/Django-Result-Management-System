@@ -102,7 +102,6 @@ class MarkSerializer(serializers.ModelSerializer):
 
 # TRYING
 
-
 class StudentResultSerializer(serializers.ModelSerializer):
     marks = MarkSerializer(many=True, source='marks_set')
 

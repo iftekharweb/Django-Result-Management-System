@@ -76,8 +76,6 @@ class Student(models.Model):
         return f'{self.id_no}'
 
 
-
-
 class Marks(models.Model):
     SECTION_CHOICES = [
         ('A', 'Section A'),

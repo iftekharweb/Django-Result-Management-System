@@ -12,6 +12,5 @@ router.register('marks', views.MarkViewSet, basename='marks')
 
 urlpatterns = [
     path('', include(router.urls)),  # Include router URLs
-    path('students/<int:pk>/result/', views.StudentResultView.as_view(), name='student-result'),
-    # Other custom URLs...
+    path('students/<int:pk>/result/', views.StudentResultView.as_view(), name='student-result')
 ]
