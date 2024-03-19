@@ -82,14 +82,14 @@ class Student(models.Model):
     university = models.CharField(max_length=255, default='University of Rajshahi')
     blood_group = models.CharField(max_length=10, choices=BLOOD_GROUP_CHOICE)
     email = models.EmailField(unique=True)
-    phone_number = models.CharField(max_length=15, null=True)
+    phone_number = models.CharField(max_length=15, null=True, blank=True)
     session = models.CharField(max_length=20, default='2018-2019')
     birth_day = models.DateField()
     residential_hall_name = models.CharField(max_length=255)
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
-    semester_result = models.DecimalField(max_digits=5, decimal_places=3)
+    semester_result = models.DecimalField(max_digits=5, decimal_places=3, default=0, blank=True)
 
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    #user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     def __str__(self) -> str:
         return f'{self.id_no}'
 
@@ -105,10 +105,10 @@ class Mark(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     section = models.CharField(max_length=1, choices=SECTION_CHOICES)
 
-    attendence_marks = models.DecimalField(max_digits=5, decimal_places=2)
-    ct_marks = models.DecimalField(max_digits=5, decimal_places=2)
-    presentation_marks = models.DecimalField(max_digits=5, decimal_places=2)
-    semester_final_marks = models.DecimalField(max_digits=5, decimal_places=2)
+    attendence_marks = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+    ct_marks = models.DecimalField(max_digits=5, decimal_places=2, blank=True, default=0)
+    presentation_marks = models.DecimalField(max_digits=5, decimal_places=2, blank=True, default=0)
+    semester_final_marks = models.DecimalField(max_digits=5, decimal_places=2, default=0)
 
 class SemesterCGPA(models.Model):
     student = models.OneToOneField(Student, on_delete=models.CASCADE, primary_key=True)
@@ -116,7 +116,7 @@ class SemesterCGPA(models.Model):
     scgpa = models.DecimalField(max_digits=5, decimal_places=2, blank=True)
 
 
-
+# Not Used Table
 class YearlyCGPA(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     year = models.IntegerField()

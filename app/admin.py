@@ -44,6 +44,7 @@ class StudentAdmin(admin.ModelAdmin):
     ]
     list_editable = ['semester']
     search_fields = ['id_no', 'semester', 'session']
+    readonly_fields = ['semester_result']
 
 @admin.register(models.Mark)
 class MarksAdmin(admin.ModelAdmin):

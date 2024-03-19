@@ -103,7 +103,7 @@ class MarkSerializer(serializers.ModelSerializer):
 # TRYING
 
 class StudentResultSerializer(serializers.ModelSerializer):
-    marks = MarkSerializer(many=True, source='marks_set')
+    marks = MarkSerializer(many=True, source='mark_set')
 
     class Meta:
         model = models.Student
@@ -111,7 +111,7 @@ class StudentResultSerializer(serializers.ModelSerializer):
     semester_result = serializers.SerializerMethodField(method_name='get_semester_result')
 
     def get_semester_result(self, obj):
-        marks = obj.marks_set.all()
+        marks = obj.mark_set.all()
         total_marks = 0
         total_credits = 0
         
